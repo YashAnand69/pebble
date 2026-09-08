@@ -32,11 +32,11 @@ Use Node 22.13+ (Node 24 recommended).
 
 ```sh
 npm install
-npm run dev
+npm run dev:netlify
 node bin/pebble.mjs examples/fibonacci.pebble
 node bin/pebble.mjs  # persistent, multiline terminal REPL
 node --test tests/engine.test.mjs
-npm run build
+npm run build:netlify
 ```
 
 The app uses the generated Sites/Vinext/React scaffold. The language core has no dependencies and can run independently in Node or a Web Worker.
@@ -48,3 +48,9 @@ The app uses the generated Sites/Vinext/React scaffold. The language core has no
 This release intentionally delivers the full interpreter rather than claiming a bytecode VM. Hash maps, static typing, optimizations, and a VM remain future work. Forward references to functions declared later are not supported; define a function before capturing it. Numbers use JavaScript's IEEE-754 representation. Runtime errors preserve mutations already performed, including in the REPL.
 
 An optional WebMCP `run_pebble_program` tool uses the same execution path when the browser supports it. The current development environment had no supported WebMCP validation context, so its contract has not been verified in-browser.
+
+## Deploy to Netlify
+
+The Netlify build is a static Vite/React bundle using the same studio and language engine. `netlify.toml` selects `npm run build:netlify` and publishes `dist-netlify/` on Node 24. It needs no environment secrets or serverless functions. Source stays private on GitHub; the deployed web app is publicly accessible.
+
+The original Sites build remains available through `npm run dev` and `npm run build`.
