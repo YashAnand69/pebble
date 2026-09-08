@@ -1,0 +1,16 @@
+// A function can carry a little memory with it.
+fn makeCounter(start) {
+  let count = start;
+  fn next() {
+    count = count + 1;
+    return count;
+  }
+  return next;
+}
+
+let counter = makeCounter(0);
+let another = makeCounter(100);
+print(counter());
+print(counter());
+print(another());
+print(counter());

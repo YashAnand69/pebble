@@ -1,0 +1,7 @@
+// Mistakes are part of making things.
+fn divide(a, b) {
+  return a / b;
+}
+
+print("Let’s try something...");
+print(divide(10, 0));

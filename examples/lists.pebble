@@ -1,0 +1,13 @@
+// A tiny standard library, ready to explore.
+let squares = [];
+let numbers = range(8);
+let i = 0;
+while (i < len(numbers)) {
+  push(squares, numbers[i] * numbers[i]);
+  i = i + 1;
+}
+
+print(upper("hello, pebble"));
+print(squares);
+print("Items: " + str(len(squares)));
+print("Last square:", squares[7]);
