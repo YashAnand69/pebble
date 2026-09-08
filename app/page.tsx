@@ -630,7 +630,7 @@ export default function Home() {
                     e.preventDefault();
                     execute(source);
                   }
-                  if (e.key === 'Tab') {
+                  if (e.key === 'Tab' && !e.shiftKey) {
                     e.preventDefault();
                     const start = e.currentTarget.selectionStart,
                       end = e.currentTarget.selectionEnd;
