@@ -51,6 +51,6 @@ An optional WebMCP `run_pebble_program` tool uses the same execution path when t
 
 ## Deploy to Netlify
 
-The Netlify build is a static Vite/React bundle using the same studio and language engine. `netlify.toml` selects `npm run build:netlify` and publishes `dist-netlify/` on Node 24. It needs no environment secrets or serverless functions. Source stays private on GitHub; the deployed web app is publicly accessible.
+The Netlify build is a static Vite/React bundle using the same studio and language engine. `netlify.toml` selects `npm run build:netlify` and publishes `dist-netlify/` on Node 24. It needs no environment secrets or serverless functions.
 
 The original Sites build remains available through `npm run dev` and `npm run build`.
