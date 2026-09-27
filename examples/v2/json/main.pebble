@@ -1,0 +1,10 @@
+const raw = '{"name":"Pebble","version":2,"features":["modules","classes","closures"]}';
+let config = parseJSON(raw);
+config.features.push("dictionaries");
+config.ready = true;
+
+print(config.name + " " + str(config.version));
+for feature in config.features {
+  print("  ✓ " + feature);
+}
+print(stringifyJSON(config));

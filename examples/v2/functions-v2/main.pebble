@@ -1,0 +1,15 @@
+fn greet(name = "traveler", punctuation = "!") {
+  return "Hello, " + name + punctuation;
+}
+
+fn total(label, ...numbers) {
+  print(label + ": " + str(numbers.sum()));
+}
+
+const double = fn(n) => n * 2;
+const values = range(1, 6).map(double);
+
+print(greet());
+print(greet("Pebble", " ✦"));
+total("Score", ...values);
+print("Powers:", range(5).map(fn(n) => 2 ** n));

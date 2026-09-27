@@ -1,0 +1,15 @@
+const scores = [72, 95, 61, 88, 95, 43, 100];
+const passing = scores.filter(fn(score) => score >= 70);
+const ranked = passing.unique().sort(fn(a, b) => b - a);
+const average = passing.sum() / passing.length;
+
+print("Leaderboard:", ranked);
+print("Average:", round(average));
+print("Everyone passed?", scores.every(fn(s) => s >= 70));
+
+for pair in ranked.enumerate() {
+  print("#" + str(pair[0] + 1) + " — " + str(pair[1]));
+}
+
+fn multiplyBy(factor) => fn(n) => n * factor;
+print("Double:", [1, 2, 3].map(multiplyBy(2)));

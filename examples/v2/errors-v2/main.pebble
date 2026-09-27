@@ -1,0 +1,21 @@
+fn withdraw(balance, amount) {
+  if (amount > balance) {
+    throw "Insufficient credits";
+  }
+  return balance - amount;
+}
+
+try {
+  print(withdraw(50, 80));
+} catch (error) {
+  print("Recovered:", error.message);
+  print("At line:", error.line);
+}
+
+try {
+  print(10 / 0);
+} catch (error) {
+  print("Arithmetic:", error.message);
+}
+
+print("The program is still running.");

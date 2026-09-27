@@ -1,0 +1,13 @@
+const text = "small language big ideas small steps big possibilities";
+const words = text.lower().split(" ");
+let counts = {};
+
+for word in words {
+  counts[word] = (counts[word] ?? 0) + 1;
+}
+
+for word in counts.keys().sort() {
+  print(word + ": " + repeat("▰", counts[word]));
+}
+print("Unique words:", len(counts));
+print("As JSON:", stringifyJSON(counts));

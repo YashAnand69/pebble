@@ -1,0 +1,22 @@
+class Account {
+  fn init(owner, balance = 0) {
+    this.owner = owner;
+    this.balance = balance;
+  }
+
+  fn deposit(amount) {
+    assert(amount > 0, "Deposit must be positive");
+    this.balance += amount;
+    return this;
+  }
+
+  fn describe() {
+    return this.owner + " has " + str(this.balance) + " credits";
+  }
+}
+
+let account = Account("Ada", 100);
+account.deposit(50).deposit(25);
+let describe = account.describe;
+print(describe());
+print(Account("Grace").describe());

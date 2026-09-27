@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Pebble — Language Studio',
+  title: 'Pebble 2 — Language Studio',
   description:
-    'Write a little language. Explore how code comes alive with a hand-built interpreter, live console, and syntax explorer.',
+    'Explore Pebble 2: modules, classes, functional collections, and a browser studio with execution replay.',
 };
 
 export default function RootLayout({

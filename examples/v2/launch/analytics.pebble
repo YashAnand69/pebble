@@ -1,0 +1,10 @@
+// Export just what another file needs.
+export fn summarize(missions) {
+  const distance = missions
+    .map(fn(m) => m.distance)
+    .reduce(fn(total, km) => total + km, 0);
+
+  return str(missions.length) + " active missions · "
+    + str(round(distance)) + " billion km combined";
+}
+

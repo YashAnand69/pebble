@@ -1,0 +1,21 @@
+// Welcome to Pebble 2. Small language. Bigger ideas.
+import { summarize } from "./analytics.pebble";
+
+const missions = [
+  { name: "Voyager", distance: 24.5, active: true },
+  { name: "Pioneer", distance: 20.1, active: false },
+  { name: "New Horizons", distance: 8.7, active: true },
+];
+
+const active = missions.filter(fn(m) => m.active);
+const names = active.map(fn(m) => m.name.upper());
+
+print("✦  MISSION CONTROL");
+print(names.join("  /  "));
+print(summarize(active));
+
+for mission in active {
+  print(mission.name + ": " + str(mission.distance) + " billion km");
+}
+
+assert(active.length == 2, "Expected two active missions");
