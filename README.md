@@ -2,7 +2,7 @@
 
 A real programming language and a browser workspace for building, running, and understanding small programs. The engine has a hand-written lexer, Pratt parser, and tree-walking interpreter. Pebble source never becomes JavaScript: no `eval`, code generation, or parser framework.
 
-**[Open the studio](https://pebble-yashanand69.netlify.app/)** · [Language grammar](docs/grammar.md) · [Version 2 changes](CHANGELOG.md)
+**[Open the studio](https://pebble-peach-kappa.vercel.app/)** · [Language grammar](docs/grammar.md) · [Version 2 changes](CHANGELOG.md)
 
 ## What's new
 
@@ -81,7 +81,7 @@ npm ci
 npm run dev:netlify
 npm test
 npm run typecheck
-npm run build:netlify
+npm run build:vercel
 ```
 
 The language engine has no dependencies. Run it directly with Node:
@@ -133,8 +133,13 @@ source → syntax.js lexer → Pratt parser → engine.js interpreter → output
 
 The Node test suite covers original behavior, v2 semantics, shipped projects, module isolation, budgets, project validation, CLI execution, and path confinement. CI runs tests, TypeScript checking, and the production build. Browser verification includes project creation, module edits, reload persistence, import/export, REPL variables, replay navigation, responsive layout, and the WebMCP valid/invalid-input contract.
 
-## Deploy to Netlify
+## Deploy to Vercel
 
-The production app is a static Vite/React bundle. `netlify.toml` builds with `npm run build:netlify` and publishes `dist-netlify/` on Node 24. It needs no environment secrets or serverless functions. Pebble programs run on the visitor's device.
+The production app is a static Vite/React bundle. `vercel.json` selects the Vite preset, builds with `npm run build:vercel`, and publishes `dist-vercel/`. It needs no environment secrets or serverless functions. Pebble programs run on the visitor's device, including the worker bundled with the app.
 
-The original Sites/Vinext build remains available through `npm run dev` and `npm run build`.
+```sh
+npx vercel link
+npx vercel deploy --prod
+```
+
+The Netlify configuration is also retained: `netlify.toml` builds with `npm run build:netlify` and publishes `dist-netlify/` on Node 24. The original Sites/Vinext build remains available through `npm run dev` and `npm run build`.

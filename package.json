@@ -14,7 +14,8 @@
     "build:netlify": "vite build --config vite.netlify.config.ts",
     "dev:netlify": "vite --config vite.netlify.config.ts",
     "test": "node --test tests/*.test.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:vercel": "vite build --config vite.netlify.config.ts --outDir dist-vercel"
   },
   "dependencies": {
     "react": "19.2.6",

@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/postcss';
 import { fileURLToPath } from 'node:url';
 
-// Pebble executes entirely in the browser; Netlify needs only static assets.
+// Pebble executes entirely in the browser; Netlify and Vercel serve static assets.
 // Keep the original Sites/Cloudflare build available in vite.config.ts.
 export default defineConfig({
   plugins: [react()],
