@@ -481,6 +481,9 @@ function GuardPanel() {
     }
   }
   const selected = scenarios.find((s) => s.id === scenario);
+  const firstBoundary = mode === 'enforce' && result
+    ? result.events.findIndex((event) => event.decision !== 'allow')
+    : -1;
   const visible = result
     ? showAll
       ? result.events
@@ -620,8 +623,15 @@ function GuardPanel() {
                   <b>{result.summary.block}</b> block
                 </span>
               </div>
+              <p className="eco-fine-print">
+                {firstBoundary >= 0
+                  ? `Replay stopped before action ${firstBoundary + 1}. Later actions are hypothetical; counts show scored fixture decisions.`
+                  : mode === 'shadow'
+                    ? 'Shadow records recommendations while permitting the fixture. No real commands run.'
+                    : 'All reviewed fixture actions were permitted. No real commands run.'}
+              </p>
               <ol className="eco-guard-events">
-                {visible.map((event) => (
+                {visible.map((event, index) => (
                   <li key={event.id}>
                     <span className={'eco-verdict ' + event.decision}>
                       {event.decision}
@@ -637,7 +647,9 @@ function GuardPanel() {
                           ? ` · would ${event.would_have}`
                           : ''}
                       </p>
-                      {event.executed === false ? (
+                      {firstBoundary >= 0 && index > firstBoundary ? (
+                        <small>Hypothetical next step · never executed</small>
+                      ) : event.executed === false ? (
                         <small>Stopped before this action · replay only</small>
                       ) : null}
                     </div>
