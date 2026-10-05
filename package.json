@@ -15,7 +15,8 @@
     "dev:netlify": "vite --config vite.netlify.config.ts",
     "test": "node --test tests/*.test.mjs",
     "typecheck": "tsc --noEmit",
-    "build:vercel": "vite build --config vite.netlify.config.ts --outDir dist-vercel"
+    "build:vercel": "vite build --config vite.netlify.config.ts --outDir dist-vercel",
+    "pack:runtime": "node scripts/package-runtime.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

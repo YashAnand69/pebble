@@ -43,3 +43,5 @@ next-env.d.ts
 /.netlify/
 
 /dist-vercel/
+
+/dist-runtime/

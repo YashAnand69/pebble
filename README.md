@@ -87,6 +87,8 @@ npm run typecheck
 npm run build:vercel
 ```
 
+A [standalone runtime package](https://github.com/YashAnand69/pebble/releases/tag/v2.1.0) bundles the interpreter and optional ML extension without UI dependencies. Build it with `npm run pack:runtime`.
+
 The core language engine has no dependencies. The optional ML extension uses TensorFlow.js/WASM. Run ordinary programs directly with Node:
 
 ```sh
