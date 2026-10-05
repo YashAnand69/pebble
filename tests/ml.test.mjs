@@ -69,37 +69,40 @@ test('embedding accumulates gradients for repeated IDs', () => {
 test('attention is causal and gradients agree with finite differences', () => {
   const f = fixture();
   try {
-    f.execute('const q=ml.parameter("q",[1,3,6]);capture(q);');
+    f.execute('const q=ml.parameter("q",[1,3,12]);capture(q);');
+    f.execute(
+      'fn objective(){const c=ml.tensor([0.2,-0.4,0.7,1.1,-0.6,0.8,0.3,-0.2,0.5,0.9,-0.7,0.4],[1,3,4]);return ml.sum(ml.mul(ml.gelu(ml.layerNorm(ml.attention(q,2))),c));}',
+    );
     const parameter = f.captured[0].tensor;
-    const values = Array.from({ length: 18 }, (_, i) => ((i % 7) - 3) * 0.23);
+    const values = Array.from({ length: 36 }, (_, i) => ((i % 7) - 3) * 0.23);
     const assign = (data) =>
       tf.tidy(() => parameter.assign(tf.tensor(data, parameter.shape)));
     assign(values);
     f.execute(
-      'ml.scope(fn(){capture(ml.data(ml.attention(q,1)));const g=ml.gradients(fn()=>ml.sum(ml.gelu(ml.layerNorm(ml.attention(q,1)))),[q]);capture(ml.data(g.values[0]));});',
+      'ml.scope(fn(){capture(ml.data(ml.attention(q,2)));const g=ml.gradients(fn()=>objective(),[q]);capture(ml.data(g.values[0]));});',
     );
     const original = f.captured[1],
       gradients = f.captured[2];
+    assert.ok(
+      gradients.some((value) => Math.abs(value) > 0.05),
+      'Gradient probe must be nondegenerate',
+    );
     const changed = values.slice();
-    changed.splice(12, 6, 4, -3, 2, -5, 7, -4);
+    changed.splice(24, 12, 4, -3, 2, -5, 7, -4, 3, 5, -2, 8, -6, 2);
     assign(changed);
-    f.execute('ml.scope(fn()=>capture(ml.data(ml.attention(q,1))));');
-    f.captured[3].slice(0, 4).forEach((v, i) => closeTo(v, original[i], 1e-6));
-    for (const index of [0, 7, 11, 16]) {
+    f.execute('ml.scope(fn()=>capture(ml.data(ml.attention(q,2))));');
+    f.captured[3].slice(0, 8).forEach((v, i) => closeTo(v, original[i], 1e-6));
+    for (const index of [0, 7, 11, 28]) {
       const epsilon = 0.003,
         plus = values.slice(),
         minus = values.slice();
       plus[index] += epsilon;
       minus[index] -= epsilon;
       assign(plus);
-      f.execute(
-        'ml.scope(fn()=>capture(ml.item(ml.sum(ml.gelu(ml.layerNorm(ml.attention(q,1)))))));',
-      );
+      f.execute('ml.scope(fn()=>capture(ml.item(objective())));');
       const high = f.captured.at(-1);
       assign(minus);
-      f.execute(
-        'ml.scope(fn()=>capture(ml.item(ml.sum(ml.gelu(ml.layerNorm(ml.attention(q,1)))))));',
-      );
+      f.execute('ml.scope(fn()=>capture(ml.item(objective())));');
       const low = f.captured.at(-1);
       closeTo(gradients[index], (high - low) / (2 * epsilon), 0.003);
     }
@@ -211,5 +214,17 @@ test('file extension blocks traversal and symlinks before creating outside direc
   } finally {
     f.host.dispose();
     rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('duplicate parameter errors release initialization tensors', () => {
+  const f = fixture();
+  try {
+    f.execute('const p=ml.parameter("unique",[3]);');
+    const baseline = tf.memory().numTensors;
+    for (let i = 0; i < 5; i++) f.execute('ml.parameter("unique",[3]);', false);
+    assert.equal(tf.memory().numTensors, baseline);
+  } finally {
+    f.host.dispose();
   }
 });

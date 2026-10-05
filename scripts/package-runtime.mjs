@@ -28,8 +28,9 @@ try {
   cpSync(join(root, 'examples'), join(temporary, 'examples'), {
     recursive: true,
   });
-  for (const name of ['LICENSE', 'README.md', 'CHANGELOG.md'])
+  for (const name of ['LICENSE', 'CHANGELOG.md'])
     cpSync(join(root, name), join(temporary, name));
+  cpSync(join(root, 'docs/runtime-readme.md'), join(temporary, 'README.md'));
   writeFileSync(
     join(temporary, 'package.json'),
     JSON.stringify(

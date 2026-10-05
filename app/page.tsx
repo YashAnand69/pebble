@@ -42,7 +42,7 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog';
 import { Slider } from '@/components/ui/slider';
-import { lex, parse, resolveModule } from '@/lib/pebble/engine.js';
+import { lex, parse, resolveModule, VERSION } from '@/lib/pebble/engine.js';
 import { projects, validateProject } from '@/lib/pebble/projects.js';
 import { guide, library as standardLibrary } from '@/lib/pebble/reference.js';
 import { CodeEditor, Tree } from './studio/code-editor';
@@ -53,6 +53,7 @@ import {
   type Variable,
 } from './studio/use-runtime';
 const STORAGE = 'pebble-studio-v2';
+const studioVersion = VERSION.split('.').slice(0, 2).join('.');
 const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : String(error);
 type ModelContext = {
@@ -100,17 +101,62 @@ function Guide() {
         <span>Language guide</span>
       </DialogTrigger>
       <DialogContent className="guide-modal">
-        <DialogTitle>Pebble 2 language guide</DialogTitle>
+        <DialogTitle>Pebble {studioVersion} language guide</DialogTitle>
         <DialogDescription>
-          From a small expression to a program with multiple files. Everything
-          below runs in this studio.
+          Write and run programs here. Train models with the optional desktop
+          runtime.
         </DialogDescription>
         <Tabs defaultValue="language">
-          <TabsList>
+          <TabsList className="h-auto max-w-full flex-wrap">
             <TabsTrigger value="language">Language</TabsTrigger>
             <TabsTrigger value="library">Standard library</TabsTrigger>
             <TabsTrigger value="shortcuts">Studio</TabsTrigger>
+            <TabsTrigger value="ml">Machine learning</TabsTrigger>
           </TabsList>
+          <TabsContent value="ml">
+            <div className="guide-grid">
+              <section>
+                <h3>Train a model in Pebble</h3>
+                <p>
+                  Version 2.1 adds tensors, gradients, AdamW and saved weights
+                  to the desktop runtime. Model programs run in a terminal on
+                  your computer.
+                </p>
+                <pre>
+                  {
+                    'node bin/pebble.mjs examples/ml/regression.pebble --ml --compute'
+                  }
+                </pre>
+                <p>
+                  <a
+                    href="https://github.com/YashAnand69/pebble/blob/main/docs/machine-learning.md"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Read the machine-learning guide ↗
+                  </a>
+                </p>
+              </section>
+              <section>
+                <h3>PebbleLM · 2M</h3>
+                <p>
+                  A transformer with exactly two million parameters. Its
+                  network, tokenizer, training loop and generation are Pebble
+                  programs. An educational model trained on a small programming
+                  curriculum.
+                </p>
+                <p>
+                  <a
+                    href="https://github.com/YashAnand69/pebble-llm"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Get the open-source model ↗
+                  </a>
+                </p>
+              </section>
+            </div>
+          </TabsContent>
           <TabsContent value="language">
             <div className="guide-grid">
               {guide.map((g) => (
@@ -567,7 +613,7 @@ export default function Home() {
         >
           <Circle size={25} />
           <b>pebble</b>
-          <span>2.0</span>
+          <span>{studioVersion}</span>
         </button>
         <div className="header-caption">
           A little language. A bigger playground.
@@ -814,7 +860,7 @@ export default function Home() {
               <Check size={12} />
               {saveState}
             </span>
-            <span>Pebble 2.0 · UTF-8</span>
+            <span>Pebble {studioVersion} · UTF-8</span>
           </div>
         </section>
         <section className="output-panel">

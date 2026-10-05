@@ -87,7 +87,7 @@ npm run typecheck
 npm run build:vercel
 ```
 
-A [standalone runtime package](https://github.com/YashAnand69/pebble/releases/tag/v2.1.0) bundles the interpreter and optional ML extension without UI dependencies. Build it with `npm run pack:runtime`.
+A [standalone runtime package](https://github.com/YashAnand69/pebble/releases/tag/v2.1.1) bundles the interpreter and optional ML extension without UI dependencies. Build it with `npm run pack:runtime`.
 
 The core language engine has no dependencies. The optional ML extension uses TensorFlow.js/WASM. Run ordinary programs directly with Node:
 
@@ -151,4 +151,4 @@ The Netlify configuration is also retained: `netlify.toml` builds with `npm run 
 
 ## License
 
-Pebble's source is released under the [MIT license](LICENSE), copyright 2026 Yash Anand. Dependency licenses remain with their respective authors. See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute.
+Pebble's source is released under the [MIT license](LICENSE), copyright 2026 Yash Anand. Dependency licenses remain with their respective authors; see [third-party notices](THIRD_PARTY_NOTICES.md) for vendored stylesheet attribution. See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute.

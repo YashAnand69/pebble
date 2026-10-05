@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1 — 2026-10-05
+
+Fixed temporary tensor cleanup on parameter creation errors and reject duplicate names before allocation. Strengthened attention gradient checks with a nondegenerate multi-head finite-difference objective. Added standalone-runtime installation docs and a machine-learning guide entry in the studio; release labels follow the runtime version. Updated studio/build dependencies and retained shadcn styling with its original MIT license as a vendored stylesheet.
+
 ## 2.1.0 — 2026-10-05
 
 Released the project under MIT. Added trusted host extensions and native values, opt-in CLI tensor/autodiff operations backed by TensorFlow.js/WASM, causal attention, non-affine LayerNorm, GELU, masked cross entropy, seeded initialization/sampling, AdamW with gradient clipping, project-confined file access and validated float32 checkpoints. Added a long-job CLI mode with streaming output. Default browser budgets and the dependency-free interpreter remain unchanged.
