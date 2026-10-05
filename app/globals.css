@@ -15,7 +15,7 @@
   --color-popover-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--foreground);
-  --font-sans: Arial, Helvetica, sans-serif;
+  --font-sans: 'DM Sans', Arial, sans-serif;
 }
 :root,
 .dark {
@@ -2288,10 +2288,10 @@ h1 {
 @keyframes eco-float {
   0%,
   100% {
-    margin-top: 0;
+    transform: translateY(0);
   }
   50% {
-    margin-top: -12px;
+    transform: translateY(-6px);
   }
 }
 .studio {
@@ -2606,35 +2606,449 @@ h1 {
 }
 
 /* Shared, self-hosted ecosystem typography. Code keeps its monospace face. */
-.ecosystem-home, .ecosystem-bar {font-family:"DM Sans", Arial, sans-serif;}
-.eco-hero h1, .eco-section-heading h2, .eco-workbench-head h2, .eco-journey-card h3 {font-family:"Space Grotesk", Arial, sans-serif;}
+.ecosystem-home,
+.ecosystem-bar {
+  font-family: 'DM Sans', Arial, sans-serif;
+}
+.eco-hero h1,
+.eco-section-heading h2,
+.eco-workbench-head h2,
+.eco-journey-card h3 {
+  font-family: 'Space Grotesk', Arial, sans-serif;
+}
 
 /* Motion is progressive: without an observer, every section remains visible. */
-.eco-motion-toggle {display:inline-flex;align-items:center;gap:7px;border:1px solid #d6e0ca;background:#f3f7ec;border-radius:20px;padding:7px 10px;color:#5d705b;font-size:9px;white-space:nowrap;}
-.eco-motion-toggle[aria-pressed="true"] {background:#fffefb;}
-.eco-motion-toggle:disabled {opacity:1;cursor:default;}
-.eco-reveal {opacity:1;translate:0 0;}
-.eco-motion-ready .eco-reveal {transition:opacity .65s ease,translate .75s cubic-bezier(.2,.7,.2,1),transform .2s ease,border-color .2s ease,box-shadow .2s ease;transition-delay:var(--eco-reveal-delay,0ms),var(--eco-reveal-delay,0ms),0ms,0ms,0ms;}
-.eco-motion-ready .eco-reveal:not(.is-visible) {opacity:0;translate:0 28px;}
-.eco-tilt {--eco-tilt-x:0deg;--eco-tilt-y:0deg;--eco-pointer-x:50%;--eco-pointer-y:50%;transform-style:preserve-3d;}
-html[data-pebble-motion="full"] .eco-orbit {transform:perspective(900px) translateY(calc(var(--eco-scroll)*-38px)) rotateX(var(--eco-tilt-x)) rotateY(var(--eco-tilt-y));transition:transform .18s ease-out;}
-html[data-pebble-motion="full"] .eco-orbit-ring.ring-one {transform:rotateX(calc(48deg + var(--eco-scroll)*32deg)) rotateZ(calc(-25deg + var(--eco-scroll)*38deg));}
-html[data-pebble-motion="full"] .eco-orbit-ring.ring-two {transform:rotateY(calc(47deg - var(--eco-scroll)*28deg)) rotateZ(calc(25deg - var(--eco-scroll)*30deg));}
-html[data-pebble-motion="full"] .node-language {transform:rotate(calc(-7deg + var(--eco-scroll)*8deg)) translateY(calc(var(--eco-scroll)*-38px)) translateZ(28px);}
-html[data-pebble-motion="full"] .node-model {transform:rotate(calc(5deg - var(--eco-scroll)*8deg)) translateY(calc(var(--eco-scroll)*42px)) translateZ(45px);}
-html[data-pebble-motion="full"] .node-guard {transform:rotate(calc(-3deg + var(--eco-scroll)*10deg)) translateY(calc(var(--eco-scroll)*25px)) translateZ(35px);}
-html[data-pebble-motion="full"] .eco-journey-card.eco-tilt {transform:perspective(900px) rotateX(var(--eco-tilt-x)) rotateY(var(--eco-tilt-y));}
-html[data-pebble-motion="full"] .eco-journey-card.eco-tilt:hover {transform:perspective(900px) rotateX(var(--eco-tilt-x)) rotateY(var(--eco-tilt-y)) translateY(-4px);}
-html[data-pebble-motion="full"] .eco-journey-card.eco-tilt::before {content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at var(--eco-pointer-x) var(--eco-pointer-y),#d3e8bd66,transparent 65%);opacity:0;transition:opacity .25s;}
-html[data-pebble-motion="full"] .eco-journey-card.eco-tilt:hover::before {opacity:1;}
-html[data-pebble-motion="full"] .eco-journey-card > * {position:relative;transform:translateZ(8px);}
-html[data-pebble-motion="full"] .eco-journey-content {animation:eco-panel-enter .42s cubic-bezier(.2,.7,.2,1) both;}
-html[data-pebble-motion="full"] .studio-enter {animation:eco-studio-enter .25s ease-out both;}
-@keyframes eco-panel-enter {from {opacity:.3;translate:0 12px;}to {opacity:1;translate:0 0;}}
-@keyframes eco-studio-enter {from {opacity:.7;}to {opacity:1;}}
-html[data-pebble-motion="reduced"] .ecosystem-home *,html[data-pebble-motion="reduced"] .ecosystem-bar *,html[data-pebble-motion="reduced"] .studio {animation:none!important;transition:none!important;scroll-behavior:auto!important;}
-html[data-pebble-motion="reduced"] .eco-reveal {opacity:1!important;translate:none!important;}
-html[data-pebble-motion="reduced"] .eco-orbit,html[data-pebble-motion="reduced"] .eco-pebble-stone,html[data-pebble-motion="reduced"] .eco-orbit-node,html[data-pebble-motion="reduced"] .eco-tilt {transform:none!important;}
-@media(prefers-reduced-motion:reduce) {.eco-reveal {opacity:1!important;translate:none!important;}.eco-journey-content,.studio-enter {animation:none!important;}}
+.eco-motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #d6e0ca;
+  background: #f3f7ec;
+  border-radius: 20px;
+  padding: 7px 10px;
+  color: #5d705b;
+  font-size: 9px;
+  white-space: nowrap;
+}
+.eco-motion-toggle[aria-pressed='true'] {
+  background: #fffefb;
+}
+.eco-motion-toggle:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.eco-reveal {
+  opacity: 1;
+  translate: 0 0;
+}
+.eco-motion-ready .eco-reveal {
+  transition:
+    opacity 0.65s ease,
+    translate 0.75s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  transition-delay:
+    var(--eco-reveal-delay, 0ms), var(--eco-reveal-delay, 0ms), 0ms, 0ms, 0ms;
+}
+.eco-motion-ready .eco-reveal:not(.is-visible) {
+  opacity: 0;
+  translate: 0 28px;
+}
+.eco-tilt {
+  --eco-tilt-x: 0deg;
+  --eco-tilt-y: 0deg;
+  --eco-pointer-x: 50%;
+  --eco-pointer-y: 50%;
+  transform-style: preserve-3d;
+}
+html[data-pebble-motion='full'] .eco-orbit {
+  transform: perspective(900px) translateY(calc(var(--eco-scroll)*-38px))
+    rotateX(var(--eco-tilt-x)) rotateY(var(--eco-tilt-y));
+  transition: transform 0.18s ease-out;
+}
+html[data-pebble-motion='full'] .eco-orbit-ring.ring-one {
+  transform: rotateX(calc(48deg + var(--eco-scroll)*32deg))
+    rotateZ(calc(-25deg + var(--eco-scroll)*38deg));
+}
+html[data-pebble-motion='full'] .eco-orbit-ring.ring-two {
+  transform: rotateY(calc(47deg - var(--eco-scroll)*28deg))
+    rotateZ(calc(25deg - var(--eco-scroll)*30deg));
+}
+html[data-pebble-motion='full'] .node-language {
+  transform: rotate(calc(-7deg + var(--eco-scroll)*8deg))
+    translateY(calc(var(--eco-scroll)*-38px)) translateZ(28px);
+}
+html[data-pebble-motion='full'] .node-model {
+  transform: rotate(calc(5deg - var(--eco-scroll)*8deg))
+    translateY(calc(var(--eco-scroll)*42px)) translateZ(45px);
+}
+html[data-pebble-motion='full'] .node-guard {
+  transform: rotate(calc(-3deg + var(--eco-scroll)*10deg))
+    translateY(calc(var(--eco-scroll)*25px)) translateZ(35px);
+}
+html[data-pebble-motion='full'] .eco-journey-card.eco-tilt {
+  transform: perspective(900px) rotateX(var(--eco-tilt-x))
+    rotateY(var(--eco-tilt-y));
+}
+html[data-pebble-motion='full'] .eco-journey-card.eco-tilt:hover {
+  transform: perspective(900px) rotateX(var(--eco-tilt-x))
+    rotateY(var(--eco-tilt-y)) translateY(-4px);
+}
+html[data-pebble-motion='full'] .eco-journey-card.eco-tilt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--eco-pointer-x) var(--eco-pointer-y),
+    #d3e8bd66,
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+html[data-pebble-motion='full'] .eco-journey-card.eco-tilt:hover::before {
+  opacity: 1;
+}
+html[data-pebble-motion='full'] .eco-journey-card > * {
+  position: relative;
+  transform: translateZ(8px);
+}
+html[data-pebble-motion='full'] .eco-journey-content {
+  animation: eco-panel-enter 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+html[data-pebble-motion='full'] .studio-enter {
+  animation: eco-studio-enter 0.25s ease-out both;
+}
+@keyframes eco-panel-enter {
+  from {
+    opacity: 0.3;
+    translate: 0 12px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes eco-studio-enter {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+html[data-pebble-motion='reduced'] .ecosystem-home *,
+html[data-pebble-motion='reduced'] .ecosystem-bar *,
+html[data-pebble-motion='reduced'] .studio {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+html[data-pebble-motion='reduced'] .eco-reveal {
+  opacity: 1 !important;
+  translate: none !important;
+}
+html[data-pebble-motion='reduced'] .eco-orbit,
+html[data-pebble-motion='reduced'] .eco-pebble-stone,
+html[data-pebble-motion='reduced'] .eco-orbit-node,
+html[data-pebble-motion='reduced'] .eco-tilt {
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .eco-reveal {
+    opacity: 1 !important;
+    translate: none !important;
+  }
+  .eco-journey-content,
+  .studio-enter {
+    animation: none !important;
+  }
+}
 
-.eco-motion-ready .eco-reveal:focus-within {opacity:1;translate:0 0;transition-delay:0s;}
+.eco-motion-ready .eco-reveal:focus-within {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 0s;
+}
+
+/* Pebble surfaces: a quiet paper workspace with a clear forest accent. */
+:root {
+  --pebble-paper: #f6f7f0;
+  --pebble-surface: #fffefb;
+  --pebble-ink: #203c31;
+  --pebble-forest: #176b4f;
+  --pebble-lime: #dcebc4;
+  --pebble-line: #dce3d5;
+  --pebble-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --background: var(--pebble-paper);
+  --foreground: var(--pebble-ink);
+  --primary: var(--pebble-forest);
+  --border: var(--pebble-line);
+}
+body,
+.studio {
+  font-family: 'DM Sans', Arial, sans-serif;
+}
+.studio h1,
+.brand b,
+.eco-panel-intro h3,
+.eco-why h2 {
+  font-family: 'Space Grotesk', Arial, sans-serif;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--pebble-forest);
+  outline-offset: 4px;
+}
+.ecosystem-bar {
+  background: var(--pebble-surface);
+  border-color: var(--pebble-line);
+}
+.eco-motion-toggle,
+.eco-product-nav a,
+.eco-product-nav button,
+.eco-nav-cta {
+  font-size: 12px;
+}
+.eco-button,
+.eco-secondary,
+.run-button,
+.primary-button,
+.quiet-button {
+  border-radius: 12px;
+  min-height: 40px;
+}
+.eco-button,
+.run-button,
+.primary-button {
+  background: var(--pebble-forest);
+  border-color: var(--pebble-forest);
+  box-shadow: 0 4px 12px #203c3114;
+}
+.eco-journey-card,
+.eco-workbench,
+.workspace-v2 {
+  border-radius: 20px;
+}
+.eco-journey-card {
+  background: var(--pebble-surface);
+  box-shadow: 0 4px 20px #203c3105;
+}
+.eco-journey-card.selected {
+  box-shadow: 0 8px 24px #203c310c;
+  border-color: #9ab58a;
+}
+.eco-journey-card p,
+.eco-panel-intro > p:not(.eco-fine-print),
+.eco-why-items p,
+.eco-hero-copy > p {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.eco-hero-copy > p {
+  font-size: 16px;
+  max-width: 520px;
+}
+.eco-section-heading > p,
+.eco-fine-print,
+.eco-response small,
+.eco-response-empty p,
+.eco-scenario-description,
+.eco-mode-choice small,
+.eco-footer a,
+.eco-footer > span {
+  font-size: 12px;
+}
+.eco-pill,
+.eco-prompt-chips button,
+.eco-model-options label,
+.eco-mode-choice label,
+.eco-guard-events p,
+.eco-guard-events small,
+.eco-example-links button {
+  font-size: 11px;
+}
+.eco-interactive textarea,
+.eco-interactive select,
+.eco-response {
+  border-radius: 12px;
+}
+.eco-interactive textarea,
+.eco-interactive select {
+  font-size: 14px;
+}
+.eco-workbench-tabs button {
+  font-size: 12px;
+  min-height: 40px;
+}
+.eco-error,
+.diagnostic {
+  border-radius: 12px;
+  line-height: 1.65;
+}
+.studio .app-header {
+  height: 76px;
+  background: var(--pebble-surface);
+}
+.studio .header-caption {
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  color: #647567;
+}
+.studio .workspace-v2 {
+  box-shadow: 0 12px 40px #203c310a;
+  background: var(--pebble-surface);
+}
+.studio .project-sidebar {
+  background: #f3f6ee;
+}
+.studio .project-link {
+  border-radius: 12px;
+}
+.studio .project-link.active {
+  background: #e5eddc;
+  color: var(--pebble-forest);
+}
+.studio .quiet-button,
+.studio .help-text {
+  color: #5d7067;
+}
+.studio .sidebar-heading,
+.studio .eyebrow {
+  color: #61766a;
+}
+.studio .file-tabs button {
+  border-radius: 8px 8px 0 0;
+}
+.studio .file-tabs button.active {
+  background: var(--pebble-surface);
+  color: var(--pebble-forest);
+}
+.studio-state {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 20px 0;
+  padding: 24px;
+  border: 1px dashed var(--pebble-line);
+  border-radius: 16px;
+  background: #f7f9f2;
+  color: #617467;
+}
+.studio-state svg {
+  flex-shrink: 0;
+  color: #7e9671;
+}
+.studio-state b {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pebble-ink);
+}
+.studio-state p {
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 6px 0 0;
+  max-width: 320px;
+}
+.studio-state-dot {
+  height: 10px;
+  width: 10px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: var(--pebble-forest);
+  flex-shrink: 0;
+}
+html[data-pebble-motion='full'] button,
+html[data-pebble-motion='full'] .eco-product-nav a {
+  transition:
+    transform 140ms var(--pebble-ease),
+    background 140ms var(--pebble-ease),
+    color 140ms var(--pebble-ease);
+}
+html[data-pebble-motion='full'] button:not(:disabled):active,
+html[data-pebble-motion='full'] .eco-product-nav a:active {
+  transform: translateY(1px);
+}
+html[data-pebble-motion='full'] .eco-motion-ready .eco-reveal {
+  transition-duration: 240ms, 240ms, 140ms, 140ms, 140ms;
+  transition-timing-function: var(--pebble-ease);
+}
+html[data-pebble-motion='full'] .eco-motion-ready .eco-reveal:not(.is-visible) {
+  translate: 0 12px;
+}
+html[data-pebble-motion='full'] .eco-orbit {
+  transform: perspective(900px) rotateX(var(--eco-tilt-x))
+    rotateY(var(--eco-tilt-y));
+}
+html[data-pebble-motion='full'] .eco-journey-card.eco-tilt:hover {
+  transform: perspective(900px) rotateX(var(--eco-tilt-x))
+    rotateY(var(--eco-tilt-y)) translateY(-2px);
+}
+html[data-pebble-motion='full'] .eco-journey-content,
+html[data-pebble-motion='full'] .studio-enter {
+  animation-duration: 240ms;
+  animation-timing-function: var(--pebble-ease);
+}
+@media (max-width: 1000px) {
+  .studio .project-bar {
+    flex-wrap: wrap;
+  }
+  .studio .project-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .studio .workspace-v2 {
+    margin: 0 16px;
+  }
+}
+@media (max-width: 720px) {
+  .eco-hero-copy > p {
+    font-size: 14px;
+  }
+  .eco-motion-toggle {
+    font-size: 11px;
+  }
+  .eco-hero h1 {
+    font-size: clamp(36px, 9vw, 46px);
+  }
+  .eco-journey-card p {
+    font-size: 14px;
+  }
+  .studio .project-bar {
+    padding: 20px 16px;
+  }
+  .studio .project-actions {
+    width: 100%;
+  }
+  .studio .run-button {
+    margin-left: auto;
+  }
+  .studio .workspace-v2 {
+    margin: 0 12px;
+    border-radius: 16px;
+  }
+  .studio-state {
+    padding: 16px;
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  button,
+  a {
+    transition: none !important;
+  }
+  .eco-pebble-stone {
+    animation: none !important;
+  }
+}

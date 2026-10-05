@@ -996,10 +996,34 @@ export default function Home() {
               </span>
             </output>
             <TabsContent value="console" className="console-content">
-              <div className="console" aria-live="polite">
+              <div className="console" aria-live="polite" aria-busy={busy}>
                 <p className="console-caption">
                   {project.entry} <span>/ stdout</span>
                 </p>
+                {busy && (
+                  <output className="studio-state">
+                    <span className="studio-state-dot" />
+                    <div>
+                      <b>Running your program</b>
+                      <p>
+                        Execution stays on this device. You can stop it at any
+                        time.
+                      </p>
+                    </div>
+                  </output>
+                )}
+                {!result && !busy && (
+                  <div className="studio-state">
+                    <Terminal size={24} />
+                    <div>
+                      <b>Your next idea starts here.</b>
+                      <p>
+                        Run this project to see its output, then explore
+                        variables and replay.
+                      </p>
+                    </div>
+                  </div>
+                )}
                 {result?.output.map((line, i) => (
                   <div className="output-line" key={i}>
                     <span>{String(i + 1).padStart(2, '0')}</span>
@@ -1339,7 +1363,18 @@ export default function Home() {
               </button>
             ))}
           </div>
-          {!filtered.length && <p>No matching projects.</p>}
+          {!filtered.length && (
+            <div className="studio-state">
+              <Search size={24} />
+              <div>
+                <b>No projects match “{search}”.</b>
+                <p>Try a different name or create a project of your own.</p>
+                <button className="quiet-button" onClick={() => setSearch('')}>
+                  Clear search
+                </button>
+              </div>
+            </div>
+          )}
           <button
             className="primary-button"
             onClick={() => {
