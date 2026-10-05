@@ -152,3 +152,7 @@ The Netlify configuration is also retained: `netlify.toml` builds with `npm run 
 ## License
 
 Pebble's source is released under the [MIT license](LICENSE), copyright 2026 Yash Anand. Dependency licenses remain with their respective authors; see [third-party notices](THIRD_PARTY_NOTICES.md) for vendored stylesheet attribution. See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute.
+
+## Pebble Sentinel
+
+[Pebble Sentinel](https://pebble-sentinel.vercel.app/) applies Pebble to a pre-execution guard for AI agent tools. Its separate 1,288,368-parameter model is trained in Pebble on typed benign workflows. The [public MIT repository](https://github.com/YashAnand69/pebble-sentinel) includes the local guard, adapters, three trained seeds and evaluation limitations.
