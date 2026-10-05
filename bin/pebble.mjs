@@ -53,13 +53,15 @@ function show(result, files, repl = false) {
     );
   } else if (repl && result.value !== 'nil') console.log(result.value);
 }
-const args = process.argv.slice(2),
+const separator = process.argv.indexOf('--');
+const scriptArguments = separator < 0 ? [] : process.argv.slice(separator + 1);
+const args = process.argv.slice(2, separator < 0 ? undefined : separator),
   flags = new Set(args.filter((a) => a.startsWith('--'))),
   filename = args.find((a) => !a.startsWith('--'));
 if (flags.has('--version')) console.log(`Pebble ${VERSION}`);
 else if (flags.has('--help'))
   console.log(
-    'Pebble 2\n\npebble [file.pebble] [--check | --tokens | --ast]\n\nNo file starts the REPL. Commands: .help, .load FILE, .vars, .reset, .exit',
+    'Pebble 2.1\n\npebble [file.pebble] [--check | --tokens | --ast] [--ml] [--io] [--compute] [-- script arguments]\n\n--ml loads WASM tensors/autodiff; --io enables project-confined files.\n--compute permits long trusted jobs (100 million steps, no wall timeout).\nNo file starts the REPL. Commands: .help, .load FILE, .vars, .reset, .exit',
   );
 else if (filename) {
   try {
@@ -72,11 +74,44 @@ else if (filename) {
     else if (flags.has('--check'))
       console.log(`Syntax OK · ${Object.keys(project.files).length} file(s)`);
     else {
-      const result = createRuntime(project).run(source, {
+      const extensions = [];
+      let tensorHost = null;
+      if (flags.has('--ml') || flags.has('--io')) {
+        const { initializeML, createTensorExtension } =
+          await import('../lib/pebble/ml/tensors.js');
+        await initializeML();
+        if (flags.has('--ml')) {
+          tensorHost = createTensorExtension();
+          extensions.push(tensorHost.extension);
+        }
+        if (flags.has('--io')) {
+          const { createIOExtension } = await import('../lib/pebble/ml/io.js');
+          extensions.push(
+            createIOExtension(
+              dirname(await realpath(resolve(filename))),
+              scriptArguments,
+            ),
+          );
+        }
+      }
+      const streaming = flags.has('--compute');
+      const result = createRuntime({
+        ...project,
+        extensions,
+        ...(streaming
+          ? {
+              maxSteps: 100000000,
+              maxTimeMs: Infinity,
+              onOutput: (line) => console.log(line),
+            }
+          : {}),
+      }).run(source, {
         file: project.entry,
         trace: false,
       });
-      show(result, project.files);
+      if (!streaming) show(result, project.files);
+      else if (!result.ok) show({ ...result, output: [] }, project.files);
+      tensorHost?.dispose();
       process.exitCode = result.ok ? 0 : 1;
     }
   } catch (e) {

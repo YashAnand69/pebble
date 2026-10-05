@@ -98,7 +98,7 @@ test('CLI syntax check and version', () => {
   assert.equal(check.status, 0, check.stderr);
   assert.match(check.stdout, /Syntax OK.*2 file/);
   assert.doesNotMatch(check.stdout, /MISSION CONTROL/);
-  assert.equal(cli('--version').stdout.trim(), 'Pebble 2.0.0');
+  assert.equal(cli('--version').stdout.trim(), 'Pebble 2.1.0');
 });
 test('CLI returns nonzero on runtime errors', () => {
   const dir = mkdtempSync(join(tmpdir(), 'pebble-cli-'));

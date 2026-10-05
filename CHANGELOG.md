@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.0 — 2026-10-05
+
+Released the project under MIT. Added trusted host extensions and native values, opt-in CLI tensor/autodiff operations backed by TensorFlow.js/WASM, causal attention, non-affine LayerNorm, GELU, masked cross entropy, seeded initialization/sampling, AdamW with gradient clipping, project-confined file access and validated float32 checkpoints. Added a long-job CLI mode with streaming output. Default browser budgets and the dependency-free interpreter remain unchanged.
+
+The separate public PebbleLM project defines and trains an exactly two-million-parameter transformer using Pebble programs. Added ML documentation, an executable regression example, gradient/causality/memory/checkpoint/path tests and contribution guidance.
+
 ## 2.0.0 — 2026-09-27
 
 ### Language

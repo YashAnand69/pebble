@@ -1,0 +1,16 @@
+// Run: node bin/pebble.mjs examples/ml/regression.pebble --ml --compute
+ml.seed(42);
+const weights = ml.parameter("weights", [1, 1]);
+const optimizer = ml.adamW([weights], 0);
+for step in range(300) {
+  const loss = ml.scope(fn() {
+    const x = ml.tensor([1, 2, 3, 4], [4, 1]);
+    const y = ml.tensor([3, 6, 9, 12], [4, 1]);
+    return ml.minimize(optimizer, fn() {
+      const error = ml.sub(ml.linear(x, weights), y);
+      return ml.mean(ml.mul(error, error));
+    }, 0.03);
+  });
+  if (step % 100 == 0) { print("Step", step, "loss", loss); }
+}
+print("Learned multiplier:", ml.data(weights));

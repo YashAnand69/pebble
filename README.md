@@ -1,10 +1,13 @@
-# Pebble 2 — Language Studio
+# Pebble 2.1 — Language Studio
 
 A real programming language and a browser workspace for building, running, and understanding small programs. The engine has a hand-written lexer, Pratt parser, and tree-walking interpreter. Pebble source never becomes JavaScript: no `eval`, code generation, or parser framework.
 
 **[Open the studio](https://pebble-peach-kappa.vercel.app/)** · [Language grammar](docs/grammar.md) · [Version 2 changes](CHANGELOG.md)
 
 ## What's new
+
+Version 2.1 adds an opt-in Node tensor/autodiff extension, AdamW, project-confined file I/O and binary checkpoints. [PebbleLM](https://github.com/YashAnand69/pebble-llm) defines and trains an exactly 2,000,000-parameter transformer in Pebble. See the [machine-learning guide](docs/machine-learning.md) and run `node bin/pebble.mjs examples/ml/regression.pebble --ml --compute`.
+
 
 - **Modules:** multiple files, named and namespace imports, aliases, isolated module scope, exports, and a per-session module cache.
 - **Objects:** dictionaries with dot/index access, classes, constructors, mutable fields, and automatically bound methods.
@@ -84,7 +87,7 @@ npm run typecheck
 npm run build:vercel
 ```
 
-The language engine has no dependencies. Run it directly with Node:
+The core language engine has no dependencies. The optional ML extension uses TensorFlow.js/WASM. Run ordinary programs directly with Node:
 
 ```sh
 node bin/pebble.mjs examples/v2/launch/main.pebble
@@ -143,3 +146,7 @@ npx vercel deploy --prod
 ```
 
 The Netlify configuration is also retained: `netlify.toml` builds with `npm run build:netlify` and publishes `dist-netlify/` on Node 24. The original Sites/Vinext build remains available through `npm run dev` and `npm run build`.
+
+## License
+
+Pebble's source is released under the [MIT license](LICENSE), copyright 2026 Yash Anand. Dependency licenses remain with their respective authors. See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute.
