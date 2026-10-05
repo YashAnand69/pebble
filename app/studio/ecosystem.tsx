@@ -481,9 +481,10 @@ function GuardPanel() {
     }
   }
   const selected = scenarios.find((s) => s.id === scenario);
-  const firstBoundary = mode === 'enforce' && result
-    ? result.events.findIndex((event) => event.decision !== 'allow')
-    : -1;
+  const firstBoundary =
+    mode === 'enforce' && result
+      ? result.events.findIndex((event) => event.decision !== 'allow')
+      : -1;
   const visible = result
     ? showAll
       ? result.events
@@ -810,7 +811,7 @@ export function Ecosystem({
         clientX,
         clientY,
         rect,
-        target.classList.contains('eco-orbit') ? 8 : 5,
+        target.classList.contains('eco-orbit') ? 2 : 1,
       );
       target.style.setProperty('--eco-tilt-x', tilt.x + 'deg');
       target.style.setProperty('--eco-tilt-y', tilt.y + 'deg');
