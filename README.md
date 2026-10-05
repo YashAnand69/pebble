@@ -1,5 +1,9 @@
 # Pebble 2.1 — Language Studio
 
+**[Pebble ecosystem](https://pebble-peach-kappa.vercel.app/?view=ecosystem)** · [Language Studio](https://pebble-peach-kappa.vercel.app/?view=studio) · [PebbleLM](https://pebble-llm.vercel.app/) · [Sentinel](https://pebble-sentinel.vercel.app/)
+
+[Use cases and integrated journeys](docs/ECOSYSTEM.md)
+
 A real programming language and a browser workspace for building, running, and understanding small programs. The engine has a hand-written lexer, Pratt parser, and tree-walking interpreter. Pebble source never becomes JavaScript: no `eval`, code generation, or parser framework.
 
 **[Open the studio](https://pebble-peach-kappa.vercel.app/)** · [Language grammar](docs/grammar.md) · [Version 2 changes](CHANGELOG.md)

@@ -46,6 +46,13 @@ import { lex, parse, resolveModule, VERSION } from '@/lib/pebble/engine.js';
 import { projects, validateProject } from '@/lib/pebble/projects.js';
 import { guide, library as standardLibrary } from '@/lib/pebble/reference.js';
 import { CodeEditor, Tree } from './studio/code-editor';
+import { Ecosystem, EcosystemBar } from './studio/ecosystem';
+import { useMotionPreference } from './studio/use-motion';
+import {
+  parseStudioRoute,
+  studioLocation,
+  parseGuideRoute,
+} from './studio/navigation.mjs';
 import {
   useRuntime,
   type Project,
@@ -53,6 +60,7 @@ import {
   type Variable,
 } from './studio/use-runtime';
 const STORAGE = 'pebble-studio-v2';
+const knownExamples = projects.map((project) => project.id);
 const studioVersion = VERSION.split('.').slice(0, 2).join('.');
 const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : String(error);
@@ -92,10 +100,20 @@ function Variables({ values }: { values: Variable[] }) {
     </div>
   );
 }
-function Guide() {
+function Guide({
+  open,
+  onOpenChange,
+  tab,
+  onTabChange,
+}: {
+  open: boolean;
+  onOpenChange: (value: boolean) => void;
+  tab: string;
+  onTabChange: (value: string) => void;
+}) {
   const [query, setQuery] = useState('');
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger className="quiet-button">
         <BookOpen size={16} />
         <span>Language guide</span>
@@ -106,7 +124,7 @@ function Guide() {
           Write and run programs here. Train models with the optional desktop
           runtime.
         </DialogDescription>
-        <Tabs defaultValue="language">
+        <Tabs value={tab} onValueChange={(value) => onTabChange(String(value))}>
           <TabsList className="h-auto max-w-full flex-wrap">
             <TabsTrigger value="language">Language</TabsTrigger>
             <TabsTrigger value="library">Standard library</TabsTrigger>
@@ -241,6 +259,10 @@ function Guide() {
   );
 }
 export default function Home() {
+  const motion = useMotionPreference();
+  const [view, setView] = useState<'ecosystem' | 'studio'>('ecosystem');
+  const [guideOpen, setGuideOpen] = useState(false);
+  const [guideTab, setGuideTab] = useState('language');
   const [workspace, setWorkspace] = useState<Project[]>(projects),
     [active, setActive] = useState(projects[0].id),
     [file, setFile] = useState(projects[0].entry),
@@ -354,14 +376,20 @@ export default function Home() {
       warning =
         'Saved workspace could not be loaded. It has been preserved. Export any new work to keep it; automatic saving is paused.';
     }
-    // oxlint-disable-next-line react/react-compiler -- Hydrate client state from external browser storage after mount.
+    const route = parseStudioRoute(window.location.search, knownExamples);
+    if (route.example) p = all.find((item) => item.id === route.example) || p;
+    // oxlint-disable-next-line react/react-compiler -- Hydrate the browser URL and restored workspace after mount.
+    setView(route.view as 'ecosystem' | 'studio');
     setWorkspace(all);
     setActive(p.id);
     setFile(p.entry);
     setLoaded(true);
-    void runProject(p);
+    if (route.view === 'studio' && parseGuideRoute(window.location.search)) {
+      setGuideOpen(true);
+      setGuideTab('ml');
+    }
     if (warning) setNotice(warning);
-  }, [runProject]);
+  }, []);
   useEffect(() => {
     if (!loaded) return;
     if (storageBlocked.current) {
@@ -385,6 +413,7 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, [workspace, active, loaded]);
   useEffect(() => {
+    if (view !== 'studio' || !loaded) return;
     const ctx = (document as Document & { modelContext?: ModelContext })
       .modelContext;
     if (!ctx?.registerTool) return;
@@ -405,6 +434,8 @@ export default function Home() {
             },
             annotations: { readOnlyHint: false, untrustedContentHint: true },
             async execute(input: unknown) {
+              if (controller.signal.aborted)
+                throw new Error('Open the studio before changing a project.');
               if (
                 !input ||
                 typeof input !== 'object' ||
@@ -439,7 +470,7 @@ export default function Home() {
       ).catch(() => {});
     } catch {}
     return () => controller.abort();
-  }, [execute, busy]);
+  }, [execute, busy, view, loaded]);
   function edit(code: string) {
     if (
       code.length > 100000 ||
@@ -468,7 +499,35 @@ export default function Home() {
     setFile(p.entry);
     setPicker(false);
     setSearch('');
-    void runProject(p);
+    setResult(null);
+    setVariables([]);
+    setHistory([]);
+    setDirty(false);
+  }
+  function openStudio(example?: string) {
+    setGuideOpen(false);
+    const known = example && knownExamples.includes(example) ? example : null;
+    setView('studio');
+    window.history.pushState(
+      {},
+      '',
+      studioLocation('studio', known, knownExamples),
+    );
+    window.scrollTo({ top: 0 });
+    if (known) {
+      const target = workspace.find((item) => item.id === known);
+      if (target) selectProject(target);
+    }
+  }
+  function showEcosystem() {
+    setGuideOpen(false);
+    setView('ecosystem');
+    window.history.pushState(
+      {},
+      '',
+      studioLocation('ecosystem', null, knownExamples),
+    );
+    window.scrollTo({ top: 0 });
   }
   function goTo(targetFile: string, line: number) {
     if (!Object.hasOwn(project.files, targetFile)) return;
@@ -595,12 +654,41 @@ export default function Home() {
     }
     setConfirmation(null);
   }
+  useEffect(() => {
+    const navigate = () => {
+      const route = parseStudioRoute(window.location.search, knownExamples);
+      setView(route.view as 'ecosystem' | 'studio');
+      if (route.view === 'studio' && parseGuideRoute(window.location.search)) {
+        setGuideOpen(true);
+        setGuideTab('ml');
+      }
+      if (route.example) {
+        const target = workspace.find((item) => item.id === route.example);
+        if (target) {
+          setActive(target.id);
+          setFile(target.entry);
+          setResult(null);
+          setVariables([]);
+          setHistory([]);
+          setDirty(false);
+        }
+      }
+    };
+    window.addEventListener('popstate', navigate);
+    return () => window.removeEventListener('popstate', navigate);
+  }, [workspace]);
   const event = result?.trace[eventIndex],
     filtered = workspace.filter((p) =>
       (p.title + ' ' + p.tag).toLowerCase().includes(search.toLowerCase()),
     );
+  if (view === 'ecosystem') return <Ecosystem onOpenStudio={openStudio} />;
   return (
-    <main className="studio">
+    <main className={'studio' + (motion.reduced ? '' : ' studio-enter')}>
+      <EcosystemBar
+        studio
+        onHome={showEcosystem}
+        onStudio={() => openStudio()}
+      />
       <header className="app-header">
         <button
           className="brand"
@@ -615,11 +703,17 @@ export default function Home() {
           <b>pebble</b>
           <span>{studioVersion}</span>
         </button>
-        <div className="header-caption">
-          A little language. A bigger playground.
-        </div>
+        <div className="header-caption">LANGUAGE STUDIO · BUILD & EXPLORE</div>
         <div className="header-actions">
-          <Guide />
+          <Guide
+            open={guideOpen}
+            onOpenChange={setGuideOpen}
+            tab={guideTab}
+            onTabChange={(value) => {
+              if (['language', 'library', 'shortcuts', 'ml'].includes(value))
+                setGuideTab(value);
+            }}
+          />
           <a
             className="quiet-button repo-link"
             href="https://github.com/YashAnand69/pebble"

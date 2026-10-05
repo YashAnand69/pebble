@@ -27,5 +27,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/ecosystem/llm/generate",
+      "destination": "https://pebble-llm.vercel.app/api/generate"
+    },
+    {
+      "source": "/api/ecosystem/sentinel/:path*",
+      "destination": "https://pebble-sentinel.vercel.app/api/:path*"
+    }
   ]
 }

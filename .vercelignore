@@ -1,0 +1,12 @@
+.git
+node_modules
+.superdesign
+.env*
+dist
+dist-netlify
+dist-vercel
+dist-runtime
+.vinext
+.wrangler
+outputs
+work
